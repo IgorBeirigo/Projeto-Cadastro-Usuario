@@ -1,19 +1,41 @@
 # Cadastro de Usuários
 
-Este projeto é uma aplicação simples de **CRUD de usuários** (Create, Read, Update, Delete), onde é possível cadastrar, listar, editar e excluir usuários com nome e e-mail.
+Este projeto é uma aplicação de um Painel Administrativo de uma emprsa de **CRUD** (Create, Read, Update, Delete), onde é possível cadastrar, listar, editar e excluir informações.
 
 ## 🚀 Tecnologias Utilizadas
 
-- **Frontend**: React.js, Bootstrap, Axios
-- **Backend**: JSON Server (API REST fake)
-- **Outros**: Font Awesome (ícones)
+- **Frontend**:
+-   React.js,
+-   Bootstrap,
+-   Axios,
+-   Font Awesome.
+- **Backend**:
+-   Node.js,
+-   Express,
+-   Sequelize,
+-   MySQL,
+-   CORS.
+-   **Padrões e Arquitetura**:
+-   REST API
+-   CRUD
 
 ## 📦 Funcionalidades
 
-- ✅ Adicionar novo usuário (nome e e-mail)
-- ✅ Listar todos os usuários cadastrados
-- ✅ Editar informações de um usuário
-- ✅ Excluir um usuário da lista
+-**Módulo de Clientes**
+-  Visualização de clientes
+-  Cadastro de novos clientes (nome, email, telefone, endereço)
+-**Módulo de Produtos**
+-  Listagem de produtos
+-  Cadastro de produtos (nome, tipo, validade, descrição)
+-**Módulo de Entregas**
+-  Visualização de entregas com dados do cliente e produto
+-  Registro de novas entregas (protocolo, status)
+  
+## 🏗️ Estrutura do Banco
+
+-  Clientes (id, nome, email, telefone, endereco)
+-  Produtos (id, nome, tipo, validade, descricao)
+-  Entregas (id, protocolo, status, clienteId, produtoId)
 
 ## 🎯 Objetivo
 
