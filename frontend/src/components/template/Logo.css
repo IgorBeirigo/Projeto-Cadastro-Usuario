@@ -3,25 +3,48 @@ aside.logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 120px;
-    padding: 20px;
+}
+
+.logo-container {
+    padding: 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 aside.logo img {
+    height: 85%;
+    width: auto;
     max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    transition: all 0.3s;
 }
 
+aside.logo img:hover {
+    transform: scale(1.05);
+}
 
+.logo-text {
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 300;
+    transition: all 0.3s;
+}
 
-@media (max-width: 576px) {
+.logo-container:hover .logo-text {
+    color: #3498db;
+}
+
+@media(max-width: 576px) {
     aside.logo {
-        height: 100px; 
+        justify-content: center;
     }
 
     aside.logo img {
-        width: auto;
-        height: 80px; 
+        height: 70%;
+    }
+    
+    .logo-text {
+        font-size: 0.9em;
     }
 }

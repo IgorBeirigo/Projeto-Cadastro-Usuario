@@ -3,9 +3,9 @@ import Main from '../template/Main'
 
 export default props =>
     <Main icon="home" title="Início"
-        subtitle="Segundo Projeto do capítulo de React.">
+        subtitle="Painel Administrativo da IDIS.">
         <div className='display-4'>Bem Vindo!</div>
         <hr />
-        <p className="mb-0">Sistema para exemplificar a construção
-            de um cadastro desenvolvido em React!</p>
+        <p className="mb-0">Painel administrativo da empresa IDIS para gerenciar 
+            Clientes, Cadastrar Produtos e filtrar Entregas!</p>
     </Main>
