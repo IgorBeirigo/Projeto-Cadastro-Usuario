@@ -23,13 +23,11 @@ aside.menu-area {
         justify-content: flex-start;
         align-items: center;
     }
-
     .menu a {
         display: inline;
         padding: 10px;
         margin: 0px;
     }
-
     .menu {
         height: 100%;
         justify-content: space-around;

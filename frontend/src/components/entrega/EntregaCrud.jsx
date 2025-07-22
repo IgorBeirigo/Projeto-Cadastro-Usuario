@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import Main from '../template/Main'
+import api from '../../services/api'
 
 const headerProps = {
     icon: 'truck',
@@ -8,13 +8,12 @@ const headerProps = {
     subtitle: 'Cadastro de entregas: Incluir, Listar, Alterar e Excluir!'
 }
 
-const baseUrl = 'http://localhost:3001/entregas'
 const initialState = {
-    entrega: { 
-        protocolo: '', 
+    entrega: {
+        protocolo: '',
         status: '',
-        clienteId: '',
-        produtoId: '' 
+        ClienteId: '',
+        ProdutoId: ''
     },
     list: [],
     clientes: [],
@@ -24,16 +23,23 @@ const initialState = {
 export default class EntregaCrud extends Component {
     state = { ...initialState }
 
-    componentDidMount() {
-        axios.get(baseUrl).then(resp => {
-            this.setState({ list: resp.data })
-        })
-        axios.get('http://localhost:3001/clientes').then(resp => {
-            this.setState({ clientes: resp.data })
-        })
-        axios.get('http://localhost:3001/produtos').then(resp => {
-            this.setState({ produtos: resp.data })
-        })
+    async componentDidMount() {
+        try {
+            const [entregasResponse, clientesResponse, produtosResponse] = await Promise.all([
+                api.get('/entregas'),
+                api.get('/clientes'),
+                api.get('/produtos')
+            ])
+            
+            this.setState({
+                list: entregasResponse.data || [],
+                clientes: clientesResponse.data || [],
+                produtos: produtosResponse.data || []
+            })
+        } catch (error) {
+            console.error('Erro ao carregar dados:', error)
+            this.setState({ list: [], clientes: [], produtos: [] })
+        }
     }
 
     clear() {
@@ -154,40 +160,34 @@ export default class EntregaCrud extends Component {
                 <thead>
                     <tr>
                         <th>Protocolo</th>
-                        <th>Status</th>
                         <th>Cliente</th>
                         <th>Produto</th>
+                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {this.renderRows()}
+                    {this.state.list && this.state.list.map(entrega => (
+                        <tr key={entrega.id}>
+                            <td>{entrega.protocolo}</td>
+                            <td>{entrega.Cliente?.nome || 'N/A'}</td>
+                            <td>{entrega.Produto?.nome || 'N/A'}</td>
+                            <td>{entrega.status}</td>
+                            <td>
+                                <button className="btn btn-warning"
+                                    onClick={() => this.load(entrega)}>
+                                    <i className="fa fa-pencil"></i>
+                                </button>
+                                <button className="btn btn-danger ml-2"
+                                    onClick={() => this.remove(entrega)}>
+                                    <i className="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         )
-    }
-
-    renderRows() {
-        return this.state.list.map(entrega => {
-            return (
-                <tr key={entrega.id}>
-                    <td>{entrega.protocolo}</td>
-                    <td>{entrega.status}</td>
-                    <td>{entrega.Cliente?.nome}</td>
-                    <td>{entrega.Produto?.nome}</td>
-                    <td>
-                        <button className="btn btn-warning"
-                            onClick={() => this.load(entrega)}>
-                            <i className="fa fa-pencil"></i>
-                        </button>
-                        <button className="btn btn-danger ml-2"
-                            onClick={() => this.remove(entrega)}>
-                            <i className="fa fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
     }
 
     render() {

@@ -1,46 +1,45 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import Main from '../template/Main'
+import api from '../../services/api'
 
 const headerProps = {
-    icon: 'cube',
+    icon: 'shopping-basket',
     title: 'Produtos',
     subtitle: 'Cadastro de produtos: Incluir, Listar, Alterar e Excluir!'
 }
 
-const baseUrl = 'http://localhost:3001/produtos'
 const initialState = {
-    produto: { 
-        nome: '', 
-        tipo: '', 
-        validade: '', 
-        descricao: '' 
-    },
+    produto: { nome: '', tipo: '', validade: '', descricao: '' },
     list: []
 }
 
 export default class ProdutoCrud extends Component {
     state = { ...initialState }
 
-    componentDidMount() {
-        axios(baseUrl).then(resp => {
-            this.setState({ list: resp.data })
-        })
+    async componentDidMount() {
+        try {
+            const response = await api.get('/produtos')
+            this.setState({ list: response.data })
+        } catch (error) {
+            console.error('Erro ao carregar produtos:', error)
+        }
     }
 
     clear() {
         this.setState({ produto: initialState.produto })
     }
 
-    save() {
+    async save() {
         const produto = this.state.produto
         const method = produto.id ? 'put' : 'post'
-        const url = produto.id ? `${baseUrl}/${produto.id}` : baseUrl
-        axios[method](url, produto)
-            .then(resp => {
-                const list = this.getUpdatedList(resp.data)
-                this.setState({ produto: initialState.produto, list })
-            })
+        const url = produto.id ? `/produtos/${produto.id}` : '/produtos'
+        try {
+            const response = await api[method](url, produto)
+            const list = this.getUpdatedList(response.data)
+            this.setState({ produto: initialState.produto, list })
+        } catch (error) {
+            console.error('Erro ao salvar produto:', error)
+        }
     }
 
     getUpdatedList(produto, add = true) {
@@ -120,11 +119,14 @@ export default class ProdutoCrud extends Component {
         this.setState({ produto })
     }
 
-    remove(produto) {
-        axios.delete(`${baseUrl}/${produto.id}`).then(resp => {
+    async remove(produto) {
+        try {
+            await api.delete(`/produtos/${produto.id}`)
             const list = this.getUpdatedList(produto, false)
             this.setState({ list })
-        })
+        } catch (error) {
+            console.error('Erro ao remover produto:', error)
+        }
     }
 
     renderTable() {

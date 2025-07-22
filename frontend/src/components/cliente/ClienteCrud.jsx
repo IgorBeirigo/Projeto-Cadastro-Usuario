@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import api from '../../services/api'
 import Main from '../template/Main'
 
 const headerProps = {
@@ -8,7 +8,6 @@ const headerProps = {
     subtitle: 'Cadastro de clientes: Incluir, Listar, Alterar e Excluir!'
 }
 
-const baseUrl = 'http://localhost:3001/clientes'
 const initialState = {
     cliente: { nome: '', email: '', telefone: '', endereco: '' },
     list: []
@@ -17,25 +16,35 @@ const initialState = {
 export default class ClienteCrud extends Component {
     state = { ...initialState }
 
-    componentDidMount() {
-        axios(baseUrl).then(resp => {
-            this.setState({ list: resp.data })
-        })
+    async componentDidMount() {
+        try {
+            const response = await api.get('/clientes')
+            this.setState({ list: response.data })
+        } catch (error) {
+            console.error('Erro ao carregar clientes:', error)
+        }
     }
 
     clear() {
         this.setState({ cliente: initialState.cliente })
     }
 
-    save() {
-        const cliente = this.state.cliente
-        const method = cliente.id ? 'put' : 'post'
-        const url = cliente.id ? `${baseUrl}/${cliente.id}` : baseUrl
-        axios[method](url, cliente)
-            .then(resp => {
-                const list = this.getUpdatedList(resp.data)
-                this.setState({ cliente: initialState.cliente, list })
-            })
+    async save() {
+        try {
+            const cliente = this.state.cliente
+            const method = cliente.id ? 'put' : 'post'
+            const url = cliente.id ? `/clientes/${cliente.id}` : '/clientes'
+            
+            console.log('Salvando cliente:', cliente)
+            const response = await api[method](url, cliente)
+            console.log('Resposta:', response.data)
+
+            const list = this.getUpdatedList(response.data)
+            this.setState({ cliente: this.initialState.cliente, list })
+        } catch (error) {
+            console.error('Erro ao salvar:', error)
+            alert('Erro ao salvar cliente. Verifique o console para mais detalhes.')
+        }
     }
 
     getUpdatedList(cliente, add = true) {
@@ -116,11 +125,10 @@ export default class ClienteCrud extends Component {
         this.setState({ cliente })
     }
 
-    remove(cliente) {
-        axios.delete(`${baseUrl}/${cliente.id}`).then(resp => {
-            const list = this.getUpdatedList(cliente, false)
-            this.setState({ list })
-        })
+    async remove(cliente) {
+        await api.delete(`/clientes/${cliente.id}`)
+        const list = this.getUpdatedList(cliente, false)
+        this.setState({ list })
     }
 
     renderTable() {

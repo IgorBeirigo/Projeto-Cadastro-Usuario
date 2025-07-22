@@ -12,7 +12,7 @@ export default props =>
                 <i className="fa fa-users"></i> Clientes
             </Link>
             <Link to="/produtos">
-                <i className="fa fa-cube"></i> Produtos
+                <i className="fa fa-shopping-basket"></i> Produtos
             </Link>
             <Link to="/entregas">
                 <i className="fa fa-truck"></i> Entregas
