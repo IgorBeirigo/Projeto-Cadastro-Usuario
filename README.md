@@ -60,6 +60,10 @@ npm start
 
 ## 📝 Licença
 
+##FACULDADE GRAN (https://faculdade.grancursosonline.com.br/)
+
+Projeto Disciplina Projeto Integrador
+
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 🧑‍💻 Autor
