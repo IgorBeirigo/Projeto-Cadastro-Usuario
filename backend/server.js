@@ -3,12 +3,12 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('./config/config');
-const sequelize = require('./config/database');
+
 const clienteRoutes = require('./routes/clienteRoutes');
 const produtoRoutes = require('./routes/produtoRoutes');
 const entregaRoutes = require('./routes/entregaRoutes');
-const expressListEndpoints = require('express-list-endpoints');
 
+const db = require('./models');
 const app = express();
 
 // Middleware de segurança e logging
@@ -26,33 +26,42 @@ app.use('/api/clientes', clienteRoutes);
 app.use('/api/produtos', produtoRoutes);
 app.use('/api/entregas', entregaRoutes);
 
+// Health check
+app.get('/health', (req, res) => {
+    res.json({ status: 'OK', message: 'Servidor está operacional' });
+});
+
 // Middleware de erro global
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ 
-        error: 'Erro interno do servidor',
-        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    console.error('Erro:', err.stack);
+    res.status(err.status || 500).json({ 
+        error: err.message || 'Erro interno do servidor',
+        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
     });
+});
+
+// 404 Handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Rota não encontrada' });
 });
 
 // Inicialização do servidor
 const startServer = async () => {
     try {
-        await sequelize.authenticate();
-        console.log('📦 Conexão com banco estabelecida');
+        await db.sequelize.authenticate();
+        console.log('✅ Conexão com banco de dados estabelecida');
         
-        await sequelize.sync();
-        console.log('🔄 Modelos sincronizados');
+        await db.sequelize.sync({ alter: false });
+        console.log('✅ Modelos sincronizados');
 
-        app.listen(config.port, () => {
-            console.log(`🚀 Servidor rodando na porta ${config.port}`);
-            if (process.env.NODE_ENV === 'development') {
-                const routes = require('express-list-endpoints')(app);
-                console.log('📍 Rotas disponíveis:', routes);
-            }
+        const PORT = config.port || 3001;
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+            console.log(`📝 API disponível em http://localhost:${PORT}/api`);
+            console.log(`🏥 Health check: http://localhost:${PORT}/health`);
         });
     } catch (error) {
-        console.error('❌ Erro ao iniciar servidor:', error);
+        console.error('❌ Erro ao iniciar servidor:', error.message);
         process.exit(1);
     }
 };
@@ -64,8 +73,9 @@ process.on('unhandledRejection', (err) => {
     console.error('🔥 Erro não tratado:', err);
     process.exit(1);
 });
-const db = require('./config/database');
 
-db.authenticate()
-  .then(() => console.log('Banco conectado com sucesso!'))
-  .catch(err => console.log('Erro ao conectar com o banco:', err));
+process.on('uncaughtException', (err) => {
+    console.error('🔥 Exceção não capturada:', err);
+    process.exit(1);
+});
+

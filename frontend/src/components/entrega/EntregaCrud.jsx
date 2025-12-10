@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
 import Main from '../template/Main'
 import api from '../../services/api'
+import axios from 'axios'
+
+
 
 const headerProps = {
     icon: 'truck',
     title: 'Entregas',
     subtitle: 'Cadastro de entregas: Incluir, Listar, Alterar e Excluir!'
 }
+const baseUrl = 'http://localhost:3001/api/entregas';
+
 
 const initialState = {
     entrega: {
         protocolo: '',
         status: '',
-        ClienteId: '',
-        ProdutoId: ''
+        clienteId: '',
+        produtoId: ''
     },
     list: [],
     clientes: [],
@@ -46,16 +51,20 @@ export default class EntregaCrud extends Component {
         this.setState({ entrega: initialState.entrega })
     }
 
-    save() {
-        const entrega = this.state.entrega
-        const method = entrega.id ? 'put' : 'post'
-        const url = entrega.id ? `${baseUrl}/${entrega.id}` : baseUrl
-        axios[method](url, entrega)
-            .then(resp => {
-                const list = this.getUpdatedList(resp.data)
-                this.setState({ entrega: initialState.entrega, list })
-            })
+    async save() {
+    const entrega = this.state.entrega;
+    const method = entrega.id ? 'put' : 'post';
+    const url = entrega.id ? `${baseUrl}/${entrega.id}` : baseUrl;
+
+    try {
+        const response = await axios[method](url, entrega);
+        const list = this.getUpdatedList(response.data);
+        this.setState({ entrega: initialState.entrega, list });
+    } catch (error) {
+        console.error('Erro ao salvar entrega:', error);
     }
+}
+
 
     getUpdatedList(entrega, add = true) {
         const list = this.state.list.filter(e => e.id !== entrega.id)

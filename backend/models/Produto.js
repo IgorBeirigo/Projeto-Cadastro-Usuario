@@ -18,6 +18,9 @@ const Produto = sequelize.define('Produto', {
         type: DataTypes.TEXT,
         allowNull: true
     }
+}, {
+    tableName: 'produtos',
+    timestamps: true
 });
 
 module.exports = Produto;

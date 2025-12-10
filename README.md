@@ -1,62 +1,175 @@
-# Cadastro de Usuários
+# 📦 Sistema CRUD - Gerenciamento de Clientes, Produtos e Entregas
 
-Este projeto é uma aplicação de um Painel Administrativo de uma emprsa de **CRUD** (Create, Read, Update, Delete), onde é possível cadastrar, listar, editar e excluir informações.
+> **Refatorado para remover autenticação e melhorar funcionalidades CRUD padrão**
 
-## 🚀 Tecnologias Utilizadas
+Sistema full-stack com React frontend e Node.js/Express backend para gerenciar clientes, produtos e entregas.
 
-- **Frontend**:
--   React.js,
--   Bootstrap,
--   Axios,
--   Font Awesome.
-- **Backend**:
--   Node.js,
--   Express,
--   Sequelize,
--   MySQL,
--   CORS.
--   **Padrões e Arquitetura**:
--   REST API
--   CRUD
+## ✨ Visão Geral
 
-## 📦 Funcionalidades
+Aplicação de Painel Administrativo com operações **CRUD** (Create, Read, Update, Delete) completas para:
+- 👥 **Clientes** - Cadastro com nome, email, telefone, endereço
+- 📦 **Produtos** - Gerenciamento com tipo e data de validade  
+- 🚚 **Entregas** - Rastreamento com relacionamento Cliente/Produto
 
--**Módulo de Clientes**
--  Visualização de clientes
--  Cadastro de novos clientes (nome, email, telefone, endereço)
--**Módulo de Produtos**
--  Listagem de produtos
--  Cadastro de produtos (nome, tipo, validade, descrição)
--**Módulo de Entregas**
--  Visualização de entregas com dados do cliente e produto
--  Registro de novas entregas (protocolo, status)
-  
-## 🏗️ Estrutura do Banco
+## 🚀 Início Rápido (5 minutos)
 
--  Clientes (id, nome, email, telefone, endereco)
--  Produtos (id, nome, tipo, validade, descricao)
--  Entregas (id, protocolo, status, clienteId, produtoId)
-
-## 🎯 Objetivo
-
-O objetivo deste projeto é praticar a integração entre o frontend (React) e uma API REST, utilizando conceitos como:
-
-- Requisições HTTP com Axios
-- Manipulação de estado e formulários em React
-- Componentização
-- Estilização com Bootstrap
-
-## ⚙️ Como executar
-
-# Instalar dependências
+```bash
+# 1. Backend
+cd backend
+cp .env.example .env  # Configure com suas credenciais MySQL
 npm install
+npm start             # Porta 3001
 
-# Iniciar servidor backend (porta 3001)
-npm run server
+# 2. Frontend (novo terminal)
+cd frontend
+npm install
+npm start             # Porta 3000
 
-# Iniciar aplicação frontend (porta 3000)
-npm start
+# 3. Teste
+curl http://localhost:3001/health
+```
 
+✅ Acesse http://localhost:3000
+
+## 📚 Documentação
+
+| Documento | Descrição |
+|-----------|-----------|
+| [QUICK_START.md](./QUICK_START.md) | 👈 **Comece aqui!** |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | Arquitetura e diagramas |
+| [API_DOCS.md](./backend/API_DOCS.md) | Endpoints da API |
+| [FRONTEND_INTEGRATION.md](./FRONTEND_INTEGRATION.md) | Integração Frontend |
+| [REFACTORING_SUMMARY.md](./REFACTORING_SUMMARY.md) | Mudanças realizadas |
+| [INDEX.md](./INDEX.md) | Índice completo |
+
+## 🎯 Endpoints da API
+
+```bash
+# CLIENTES
+GET    /api/clientes
+POST   /api/clientes
+PUT    /api/clientes/:id
+DELETE /api/clientes/:id
+
+# PRODUTOS
+GET    /api/produtos
+POST   /api/produtos
+PUT    /api/produtos/:id
+DELETE /api/produtos/:id
+
+# ENTREGAS
+GET    /api/entregas
+POST   /api/entregas
+PUT    /api/entregas/:id
+DELETE /api/entregas/:id
+
+# HEALTH
+GET    /health
+```
+
+## ✅ Mudanças Principais
+
+### Autenticação Removida ✅
+- JWT tokens desativados
+- Middleware de autenticação removido
+- Acesso livre para desenvolvimento
+
+### Melhorias ✅
+- Validação de campos obrigatórios
+- Tratamento de erros padronizado
+- Logs detalhados
+- 8 documentos novos
+- Script de testes automático
+
+## 🛠️ Stack Tecnológico
+
+**Backend**: Node.js • Express • Sequelize • MySQL • CORS • Helmet
+**Frontend**: React.js • Axios • React Router • Bootstrap
+
+## 🗂️ Estrutura
+
+```
+projeto-cadastro/
+├── backend/              # API REST
+│   ├── models/          # Sequelize models
+│   ├── routes/          # Express routes
+│   ├── controllers/     # Lógica de negócio
+│   ├── server.js        # Entry point
+│   └── test-api.js      # Testes
+├── frontend/            # React app
+│   ├── src/
+│   │   ├── components/  # React components
+│   │   └── services/    # Chamadas API
+│   └── package.json
+└── docs/               # Documentação
+```
+
+## 📋 Requisitos
+
+- Node.js 14+
+- MySQL 5.7+
+- npm ou yarn
+
+## 🧪 Testar
+
+### Script Automático
+```bash
+cd backend
+node test-api.js
+```
+
+### Teste Manual
+```bash
+curl -X POST http://localhost:3001/api/clientes \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"João","email":"joao@example.com","telefone":"11999","endereco":"Rua 1"}'
+```
+
+## 🐛 Troubleshooting
+
+**MySQL não conecta?**
+```bash
+# Inicie o MySQL
+# Windows: Services → MySQL
+# Linux: sudo systemctl start mysql
+# Mac: brew services start mysql
+```
+
+**Porta em uso?**
+```bash
+# Verifique processos
+# Windows: netstat -ano | findstr :3001
+# Linux: lsof -i :3001
+```
+
+**Mais ajuda?** Veja [QUICK_START.md - Erros Comuns](./QUICK_START.md)
+
+## 📊 Status
+
+| Aspecto | Status |
+|---------|--------|
+| CRUD Funcional | ✅ |
+| Documentação | ✅ |
+| Testes | ✅ |
+| Sem Autenticação | ✅ |
+| Pronto Produção | ⚠️ |
+
+## 🚀 Próximos Passos
+
+- [ ] Testar todos endpoints
+- [ ] Ler ARCHITECTURE.md
+- [ ] Implementar autenticação (produção)
+- [ ] Adicionar paginação
+- [ ] Testes unitários
+
+## ⚠️ Notas Importantes
+
+**Segurança**: Este projeto **não possui autenticação**. Para produção:
+- Implemente JWT
+- Adicione autorização
+- Use HTTPS
+- Valide todas as entradas
+- Rate limiting
 
 ## 📝 Licença
 
