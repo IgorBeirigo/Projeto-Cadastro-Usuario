@@ -40,7 +40,8 @@ export default class ClienteCrud extends Component {
             console.log('Resposta:', response.data)
 
             const list = this.getUpdatedList(response.data)
-            this.setState({ cliente: this.initialState.cliente, list })
+            this.setState({ cliente: initialState.cliente, list })
+
         } catch (error) {
             console.error('Erro ao salvar:', error)
             alert('Erro ao salvar cliente. Verifique o console para mais detalhes.')

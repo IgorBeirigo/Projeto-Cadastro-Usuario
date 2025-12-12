@@ -10,6 +10,7 @@ const headerProps = {
 }
 
 const baseUrl = 'http://localhost:3001/api/produtos';
+
 const initialState = {
     produto: { nome: '', tipo:'',validade: '', descricao: ''},
     list: []

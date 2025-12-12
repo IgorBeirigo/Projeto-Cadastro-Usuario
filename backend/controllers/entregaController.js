@@ -2,13 +2,15 @@ const { Entrega, Cliente, Produto } = require('../models');
 
 async function listarEntregas(req, res) {
     try {
-        const entregas = await Entrega.findAll({
-            include: [
-                { model: Cliente, attributes: ['id', 'nome', 'email'] },
-                { model: Produto, attributes: ['id', 'nome', 'tipo'] }
-            ],
-            attributes: { exclude: ['createdAt', 'updatedAt'] }
-        });
+     
+const entregas = await Entrega.findAll({
+    include: [
+        { model: Cliente, as: 'Cliente', attributes: ['id', 'nome', 'email'] },
+        { model: Produto, as: 'Produto', attributes: ['id', 'nome', 'tipo'] }
+    ],
+    attributes: { exclude: ['createdAt', 'updatedAt'] }
+});
+
         res.json(entregas);
     } catch (err) {
         console.error('Erro ao listar entregas:', err);
@@ -40,12 +42,14 @@ async function atualizarEntrega(req, res) {
         }
 
         await entrega.update(req.body);
-        const entregaAtualizada = await Entrega.findByPk(req.params.id, {
-            include: [
-                { model: Cliente, attributes: ['id', 'nome', 'email'] },
-                { model: Produto, attributes: ['id', 'nome', 'tipo'] }
-            ]
+        
+const entregaAtualizada = await Entrega.findByPk(req.params.id, {
+    include: [
+        { model: Cliente, as: 'Cliente', attributes: ['id', 'nome', 'email'] },
+        { model: Produto, as: 'Produto', attributes: ['id', 'nome', 'tipo'] }
+    ]
         });
+
         res.json(entregaAtualizada);
     } catch (err) {
         console.error('Erro ao atualizar entrega:', err);

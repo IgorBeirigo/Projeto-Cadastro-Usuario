@@ -10,7 +10,7 @@ const headerProps = {
     title: 'Entregas',
     subtitle: 'Cadastro de entregas: Incluir, Listar, Alterar e Excluir!'
 }
-const baseUrl = 'http://localhost:3001/api/entregas';
+const baseUrl = 'http://localhost:3001/entregas';
 
 
 const initialState = {
@@ -57,7 +57,8 @@ export default class EntregaCrud extends Component {
     const url = entrega.id ? `${baseUrl}/${entrega.id}` : baseUrl;
 
     try {
-        const response = await axios[method](url, entrega);
+        const response = await api[method](url, entrega)
+;
         const list = this.getUpdatedList(response.data);
         this.setState({ entrega: initialState.entrega, list });
     } catch (error) {
