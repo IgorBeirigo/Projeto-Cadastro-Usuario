@@ -1,8 +1,10 @@
 const Sequelize = require('sequelize');
+const config = require('../config/config');
 
-const sequelize = new Sequelize('sistema_entregas', 'root', '13162026', {
-    host: 'localhost',
-    dialect: 'mysql',
+const sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    port: config.port,
+    dialect: config.dialect,
     logging: console.log // Ativa logs do Sequelize
 });
 

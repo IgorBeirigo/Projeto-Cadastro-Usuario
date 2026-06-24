@@ -54,14 +54,17 @@ const startServer = async () => {
         await db.sequelize.sync({ alter: false });
         console.log('✅ Modelos sincronizados');
 
-        const PORT = config.port || 3001;
+        const PORT = process.env.PORT || 3001;
         app.listen(PORT, () => {
             console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
             console.log(`📝 API disponível em http://localhost:${PORT}/api`);
             console.log(`🏥 Health check: http://localhost:${PORT}/health`);
         });
     } catch (error) {
-        console.error('❌ Erro ao iniciar servidor:', error.message);
+        console.error('❌ Erro ao iniciar servidor:', error.message || error);
+        if (error && error.stack) {
+            console.error(error.stack);
+        }
         process.exit(1);
     }
 };

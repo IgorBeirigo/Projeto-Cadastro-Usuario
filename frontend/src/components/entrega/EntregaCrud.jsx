@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import Main from '../template/Main'
 import api from '../../services/api'
-import axios from 'axios'
-
-
 
 const headerProps = {
     icon: 'truck',
     title: 'Entregas',
     subtitle: 'Cadastro de entregas: Incluir, Listar, Alterar e Excluir!'
 }
-const baseUrl = 'http://localhost:3001/entregas';
+const baseUrl = '/entregas';
 
 
 const initialState = {
@@ -52,19 +49,18 @@ export default class EntregaCrud extends Component {
     }
 
     async save() {
-    const entrega = this.state.entrega;
-    const method = entrega.id ? 'put' : 'post';
-    const url = entrega.id ? `${baseUrl}/${entrega.id}` : baseUrl;
+        const entrega = this.state.entrega;
+        const method = entrega.id ? 'put' : 'post';
+        const url = entrega.id ? `${baseUrl}/${entrega.id}` : baseUrl;
 
-    try {
-        const response = await api[method](url, entrega)
-;
-        const list = this.getUpdatedList(response.data);
-        this.setState({ entrega: initialState.entrega, list });
-    } catch (error) {
-        console.error('Erro ao salvar entrega:', error);
+        try {
+            const response = await api[method](url, entrega);
+            const list = this.getUpdatedList(response.data);
+            this.setState({ entrega: initialState.entrega, list });
+        } catch (error) {
+            console.error('Erro ao salvar entrega:', error);
+        }
     }
-}
 
 
     getUpdatedList(entrega, add = true) {
@@ -157,11 +153,14 @@ export default class EntregaCrud extends Component {
         this.setState({ entrega })
     }
 
-    remove(entrega) {
-        axios.delete(`${baseUrl}/${entrega.id}`).then(resp => {
-            const list = this.getUpdatedList(entrega, false)
-            this.setState({ list })
-        })
+    async remove(entrega) {
+        try {
+            await api.delete(`${baseUrl}/${entrega.id}`);
+            const list = this.getUpdatedList(entrega, false);
+            this.setState({ list });
+        } catch (error) {
+            console.error('Erro ao excluir entrega:', error);
+        }
     }
 
     renderTable() {
