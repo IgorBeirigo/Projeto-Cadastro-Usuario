@@ -17,5 +17,8 @@ export default props =>
             <Link to="/entregas">
                 <i className="fa fa-truck"></i> Entregas
             </Link>
+            <Link to="/portal-colaborador">
+                <i className="fa fa-user-tie"></i> Portal do Colaborador
+            </Link>
         </nav>
     </aside>
