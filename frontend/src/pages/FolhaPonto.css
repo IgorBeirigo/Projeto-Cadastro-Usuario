@@ -1,0 +1,72 @@
+.folha-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.folha-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.folha-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #102a43;
+}
+
+.folha-header p {
+  margin: 0.5rem 0 0;
+  color: #475569;
+}
+
+.folha-filters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.folha-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.folha-filters select {
+  border: 1px solid rgba(15, 30, 51, 0.12);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  min-width: 130px;
+  background: #ffffff;
+  color: #102a43;
+}
+
+.status-pill.available {
+  background: rgba(40, 167, 69, 0.14);
+  color: #198754;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.status-pill.pending {
+  background: rgba(255, 193, 7, 0.16);
+  color: #856404;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+@media (max-width: 720px) {
+  .folha-header {
+    align-items: stretch;
+  }
+
+  .folha-filters {
+    width: 100%;
+  }
+}

@@ -6,6 +6,9 @@ import ClienteCrud from './components/cliente/ClienteCrud'
 import ProdutoCrud from './components/produto/ProdutoCrud'
 import EntregaCrud from './components/entrega/EntregaCrud'
 import PortalColaborador from './pages/PortalColaborador'
+import Holerites from './pages/Holerites'
+import FolhaPonto from './pages/FolhaPonto'
+import BaterPonto from './pages/BaterPonto'
 
 export default props => (
     <Routes>
@@ -14,6 +17,9 @@ export default props => (
         <Route path='/produtos' element={<ProdutoCrud />} />
         <Route path='/entregas' element={<EntregaCrud />} />
         <Route path='/portal-colaborador' element={<PortalColaborador />} />
+        <Route path='/portal-colaborador/holerites' element={<Holerites />} />
+        <Route path='/portal-colaborador/ponto' element={<FolhaPonto />} />
+        <Route path='/portal-colaborador/bater-ponto' element={<BaterPonto />} />
         <Route path='*' element={<Home />} />
     </Routes>
 )

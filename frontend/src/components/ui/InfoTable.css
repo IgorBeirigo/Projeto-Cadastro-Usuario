@@ -1,0 +1,72 @@
+.info-table-shell {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 1rem;
+  background: #ffffff;
+  border: 1px solid rgba(15, 30, 51, 0.08);
+  box-shadow: 0 10px 25px rgba(10, 30, 60, 0.06);
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.info-table th,
+.info-table td {
+  padding: 1rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(15, 30, 51, 0.08);
+}
+
+.info-table thead th {
+  color: #102a43;
+  font-weight: 700;
+  background: #f8fafc;
+}
+
+.info-table tbody tr:hover {
+  background: rgba(13, 110, 253, 0.04);
+}
+
+.info-table td {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.info-table td .status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.info-table td .status-pill.available {
+  background: rgba(40, 167, 69, 0.12);
+  color: #198754;
+}
+
+.info-table td .status-pill.pending {
+  background: rgba(255, 193, 7, 0.16);
+  color: #856404;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+@media (max-width: 720px) {
+  .info-table {
+    min-width: 100%;
+  }
+
+  .info-table th,
+  .info-table td {
+    padding: 0.85rem 0.85rem;
+  }
+}
