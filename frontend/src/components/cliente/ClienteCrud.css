@@ -1,0 +1,110 @@
+/* ============================================================================
+   CLIENTE CRUD STYLES
+   ============================================================================ */
+
+.cliente-crud {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  width: 100%;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.crud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--color-gray-200);
+}
+
+.crud-header h1 {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+}
+
+.crud-header p {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--color-gray-600);
+}
+
+/* ============================================================================
+   FORM CARD
+   ============================================================================ */
+
+.form-card {
+  padding: var(--spacing-2xl) !important;
+}
+
+.form-title {
+  margin: 0 0 var(--spacing-xl) 0;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  transition: all var(--transition-fast) var(--transition-timing);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.form-input:disabled {
+  background-color: var(--color-gray-100);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-input::placeholder {
+  color: var(--color-gray-500);
+}
+
+/* ============================================================================
+   TABLE ACTIONS
+   ============================================================================ */
+
+.table-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .crud-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .crud-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .form-card {
+    padding: var(--spacing-xl) !important;
+  }
+
+  .table-actions {
+    flex-direction: column;
+  }
+}

@@ -1,8 +1,48 @@
 footer.footer {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding: 0 25px;
-    background-color: #FFF;
-    box-shadow: var(--shadow);
+    justify-content: space-between;
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    background-color: white;
+    border-top: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    margin-top: auto;
+}
+
+footer.footer span {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+footer.footer i {
+    color: var(--color-error);
+}
+
+footer.footer strong {
+    color: var(--color-gray-900);
+    font-weight: var(--font-weight-semibold);
+}
+
+footer.footer .text-danger {
+    color: var(--color-error);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    footer.footer {
+        padding: var(--spacing-lg);
+        justify-content: center;
+        text-align: center;
+    }
+
+    footer.footer span {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
 }

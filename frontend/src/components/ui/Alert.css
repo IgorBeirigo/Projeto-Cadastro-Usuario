@@ -1,0 +1,111 @@
+/* ============================================================================
+   ALERT COMPONENT STYLES
+   ============================================================================ */
+
+.alert-custom {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid;
+  animation: slideInDown var(--transition-base) var(--transition-timing);
+}
+
+.alert-content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+/* ============================================================================
+   VARIANTES
+   ============================================================================ */
+
+.alert-success {
+  background-color: var(--color-success-light);
+  border-left-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.alert-warning {
+  background-color: var(--color-warning-light);
+  border-left-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.alert-error {
+  background-color: var(--color-error-light);
+  border-left-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.alert-info {
+  background-color: var(--color-info-light);
+  border-left-color: var(--color-info);
+  color: var(--color-info);
+}
+
+/* ============================================================================
+   CONTEÚDO
+   ============================================================================ */
+
+.alert-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.alert-message {
+  flex: 1;
+}
+
+.alert-title {
+  display: block;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.alert-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* ============================================================================
+   CLOSE BUTTON
+   ============================================================================ */
+
+.alert-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin: -4px -8px -4px 0;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.alert-close:hover {
+  opacity: 1;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .alert-custom {
+    padding: var(--spacing-md);
+  }
+
+  .alert-close {
+    display: none;
+  }
+}

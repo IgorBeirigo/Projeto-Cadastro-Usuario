@@ -1,210 +1,289 @@
-import React, { Component } from 'react'
-import Main from '../template/Main'
+import React, { useState, useEffect } from 'react'
 import api from '../../services/api'
+import Card from '../ui/Card'
+import Table from '../ui/Table'
+import Form, { FormGroup, FormRow, FormActions } from "../ui/Form";
+import Button from '../ui/Button'
+import Alert from '../ui/Alert'
+import './EntregaCrud.css'
 
-const headerProps = {
-    icon: 'truck',
-    title: 'Entregas',
-    subtitle: 'Cadastro de entregas: Incluir, Listar, Alterar e Excluir!'
-}
-const baseUrl = '/entregas';
-
-
-const initialState = {
-    entrega: {
+/**
+ * Entregas CRUD - Interface Moderna
+ */
+const EntregaCrud = () => {
+    const [entregas, setEntregas] = useState([])
+    const [clientes, setClientes] = useState([])
+    const [produtos, setProdutos] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [editingEntrega, setEditingEntrega] = useState(null)
+    const [formData, setFormData] = useState({
         protocolo: '',
         status: '',
         clienteId: '',
         produtoId: ''
-    },
-    list: [],
-    clientes: [],
-    produtos: []
-}
+    })
+    const [alert, setAlert] = useState(null)
+    const [showForm, setShowForm] = useState(false)
 
-export default class EntregaCrud extends Component {
-    state = { ...initialState }
+    // Carregar dados ao montar
+    useEffect(() => {
+        loadAllData()
+    }, [])
 
-    async componentDidMount() {
+    const loadAllData = async () => {
         try {
-            const [entregasResponse, clientesResponse, produtosResponse] = await Promise.all([
+            setLoading(true)
+            const [entregasRes, clientesRes, produtosRes] = await Promise.all([
                 api.get('/entregas'),
                 api.get('/clientes'),
                 api.get('/produtos')
             ])
-            
-            this.setState({
-                list: entregasResponse.data || [],
-                clientes: clientesResponse.data || [],
-                produtos: produtosResponse.data || []
-            })
+            setEntregas(entregasRes.data || [])
+            setClientes(clientesRes.data || [])
+            setProdutos(produtosRes.data || [])
         } catch (error) {
             console.error('Erro ao carregar dados:', error)
-            this.setState({ list: [], clientes: [], produtos: [] })
+            showAlert('Erro ao carregar dados', 'error')
+        } finally {
+            setLoading(false)
         }
     }
 
-    clear() {
-        this.setState({ entrega: initialState.entrega })
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
     }
 
-    async save() {
-        const entrega = this.state.entrega;
-        const method = entrega.id ? 'put' : 'post';
-        const url = entrega.id ? `${baseUrl}/${entrega.id}` : baseUrl;
+    const resetForm = () => {
+        setFormData({
+            protocolo: '',
+            status: '',
+            clienteId: '',
+            produtoId: ''
+        })
+        setEditingEntrega(null)
+        setShowForm(false)
+    }
 
+    const handleSave = async (e) => {
+        e.preventDefault()
         try {
-            const response = await api[method](url, entrega);
-            const list = this.getUpdatedList(response.data);
-            this.setState({ entrega: initialState.entrega, list });
+            setLoading(true)
+            if (editingEntrega) {
+                await api.put(`/entregas/${editingEntrega.id}`, formData)
+                showAlert('Entrega atualizada com sucesso!', 'success')
+            } else {
+                await api.post('/entregas', formData)
+                showAlert('Entrega criada com sucesso!', 'success')
+            }
+            resetForm()
+            loadAllData()
         } catch (error) {
-            console.error('Erro ao salvar entrega:', error);
+            console.error('Erro ao salvar entrega:', error)
+            showAlert('Erro ao salvar entrega', 'error')
+        } finally {
+            setLoading(false)
         }
     }
 
-
-    getUpdatedList(entrega, add = true) {
-        const list = this.state.list.filter(e => e.id !== entrega.id)
-        if(add) list.unshift(entrega)
-        return list
+    const handleEdit = (entrega) => {
+        setEditingEntrega(entrega)
+        setFormData(entrega)
+        setShowForm(true)
     }
 
-    updateField(event) {
-        const entrega = { ...this.state.entrega }
-        entrega[event.target.name] = event.target.value
-        this.setState({ entrega })
+    const handleDelete = async (entrega) => {
+        if (window.confirm(`Tem certeza que deseja deletar a entrega "${entrega.protocolo}"?`)) {
+            try {
+                setLoading(true)
+                await api.delete(`/entregas/${entrega.id}`)
+                showAlert('Entrega deletada com sucesso!', 'success')
+                loadAllData()
+            } catch (error) {
+                console.error('Erro ao deletar entrega:', error)
+                showAlert('Erro ao deletar entrega', 'error')
+            } finally {
+                setLoading(false)
+            }
+        }
     }
 
-    renderForm() {
-        return (
-            <div className="form">
-                <div className="row">
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Protocolo</label>
-                            <input type="text" className="form-control"
-                                name="protocolo"
-                                value={this.state.entrega.protocolo}
-                                onChange={e => this.updateField(e)}
-                                placeholder="Digite o protocolo..." />
-                        </div>
-                    </div>
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Status</label>
-                            <input type="text" className="form-control"
-                                name="status"
-                                value={this.state.entrega.status}
-                                onChange={e => this.updateField(e)}
-                                placeholder="Digite o status..." />
-                        </div>
-                    </div>
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Cliente</label>
-                            <select className="form-control"
-                                name="clienteId"
-                                value={this.state.entrega.clienteId}
-                                onChange={e => this.updateField(e)}>
-                                <option value="">Selecione um cliente...</option>
-                                {this.state.clientes.map(cliente => (
-                                    <option key={cliente.id} value={cliente.id}>
-                                        {cliente.nome}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Produto</label>
-                            <select className="form-control"
-                                name="produtoId"
-                                value={this.state.entrega.produtoId}
-                                onChange={e => this.updateField(e)}>
-                                <option value="">Selecione um produto...</option>
-                                {this.state.produtos.map(produto => (
-                                    <option key={produto.id} value={produto.id}>
-                                        {produto.nome}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+    const showAlert = (message, type) => {
+        setAlert({ message, type })
+        setTimeout(() => setAlert(null), 5000)
+    }
+
+    // Função auxiliar para obter nome do cliente
+    const getClienteNome = (clienteId) => {
+        const cliente = clientes.find(c => c.id === Number(clienteId) || c.id === clienteId)
+        return cliente ? cliente.nome : 'N/A'
+    }
+
+    // Função auxiliar para obter nome do produto
+    const getProdutoNome = (produtoId) => {
+        const produto = produtos.find(p => p.id === Number(produtoId) || p.id === produtoId)
+        return produto ? produto.nome : 'N/A'
+    }
+
+    // Definição das colunas da tabela
+    const tableColumns = [
+        { key: 'protocolo', label: 'Protocolo', sortable: true },
+        {
+            key: 'clienteId',
+            label: 'Cliente',
+            sortable: false,
+            render: (row) => getClienteNome(row.clienteId)
+        },
+        {
+            key: 'produtoId',
+            label: 'Produto',
+            sortable: false,
+            render: (row) => getProdutoNome(row.produtoId)
+        },
+        { key: 'status', label: 'Status', sortable: true },
+        {
+            key: 'acoes',
+            label: 'Ações',
+            sortable: false,
+            render: (row) => (
+                <div className="table-actions">
+                    <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleEdit(row)}
+                        icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>}
+                    >
+                        Editar
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant="error"
+                        onClick={() => handleDelete(row)}
+                        icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>}
+                    >
+                        Deletar
+                    </Button>
                 </div>
-                <hr />
-                <div className="row">
-                    <div className="col-12 d-flex justify-content-end">
-                        <button className="btn btn-primary"
-                            onClick={e => this.save(e)}>
-                            Salvar
-                        </button>
-                        <button className="btn btn-secondary ml-2"
-                            onClick={e => this.clear(e)}>
-                            Cancelar
-                        </button>
-                    </div>
+            )
+        }
+    ]
+
+    return (
+        <div className="entrega-crud">
+            <div className="crud-header">
+                <div>
+                    <h1>Entregas</h1>
+                    <p>Cadastro, listagem, edição e exclusão de entregas</p>
                 </div>
+                <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={() => setShowForm(!showForm)}
+                    icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>}
+                >
+                    {showForm ? 'Cancelar' : 'Nova Entrega'}
+                </Button>
             </div>
-        )
-    }
 
-    load(entrega) {
-        this.setState({ entrega })
-    }
+            {alert && (
+                <Alert
+                    variant={alert.type}
+                    dismissible
+                    onClose={() => setAlert(null)}
+                >
+                    {alert.message}
+                </Alert>
+            )}
 
-    async remove(entrega) {
-        try {
-            await api.delete(`${baseUrl}/${entrega.id}`);
-            const list = this.getUpdatedList(entrega, false);
-            this.setState({ list });
-        } catch (error) {
-            console.error('Erro ao excluir entrega:', error);
-        }
-    }
+            {showForm && (
+                <Card variant="elevated" className="form-card">
+                    <h2 className="form-title">
+                        {editingEntrega ? 'Editar Entrega' : 'Nova Entrega'}
+                    </h2>
+                    <Form onSubmit={handleSave} columns={2} gap="lg">
+                        <FormRow>
+                            <FormGroup label="Protocolo" required>
+                                <input
+                                    type="text"
+                                    name="protocolo"
+                                    value={formData.protocolo}
+                                    onChange={handleInputChange}
+                                    placeholder="Digite o protocolo..."
+                                    required
+                                    className="form-input"
+                                />
+                            </FormGroup>
+                            <FormGroup label="Status" required>
+                                <select
+                                    name="status"
+                                    value={formData.status}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="form-input"
+                                >
+                                    <option value="">Selecione o status...</option>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="enviado">Enviado</option>
+                                    <option value="entregue">Entregue</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </FormGroup>
+                        </FormRow>
+                        <FormRow>
+                            <FormGroup label="Cliente" required>
+                                <select
+                                    name="clienteId"
+                                    value={formData.clienteId}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="form-input"
+                                >
+                                    <option value="">Selecione um cliente...</option>
+                                    {clientes.map(cliente => (
+                                        <option key={cliente.id} value={cliente.id}>
+                                            {cliente.nome}
+                                        </option>
+                                    ))}
+                                </select>
+                            </FormGroup>
+                            <FormGroup label="Produto" required>
+                                <select
+                                    name="produtoId"
+                                    value={formData.produtoId}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="form-input"
+                                >
+                                    <option value="">Selecione um produto...</option>
+                                    {produtos.map(produto => (
+                                        <option key={produto.id} value={produto.id}>
+                                            {produto.nome}
+                                        </option>
+                                    ))}
+                                </select>
+                            </FormGroup>
+                        </FormRow>
+                        <FormActions>
+                            <Button variant="secondary" onClick={resetForm}>
+                                Cancelar
+                            </Button>
+                            <Button variant="primary" type="submit" loading={loading}>
+                                {editingEntrega ? 'Atualizar' : 'Salvar'} Entrega
+                            </Button>
+                        </FormActions>
+                    </Form>
+                </Card>
+            )}
 
-    renderTable() {
-        return (
-            <table className="table mt-4">
-                <thead>
-                    <tr>
-                        <th>Protocolo</th>
-                        <th>Cliente</th>
-                        <th>Produto</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.list && this.state.list.map(entrega => (
-                        <tr key={entrega.id}>
-                            <td>{entrega.protocolo}</td>
-                            <td>{entrega.Cliente?.nome || 'N/A'}</td>
-                            <td>{entrega.Produto?.nome || 'N/A'}</td>
-                            <td>{entrega.status}</td>
-                            <td>
-                                <button className="btn btn-warning"
-                                    onClick={() => this.load(entrega)}>
-                                    <i className="fa fa-pencil"></i>
-                                </button>
-                                <button className="btn btn-danger ml-2"
-                                    onClick={() => this.remove(entrega)}>
-                                    <i className="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        )
-    }
-
-    render() {
-        return (
-            <Main {...headerProps}>
-                {this.renderForm()}
-                {this.renderTable()}
-            </Main>
-        )
-    }
+            <Card variant="elevated">
+                <Table
+                    columns={tableColumns}
+                    data={entregas}
+                    options={{ paginate: true, pageSize: 10, searchable: true }}
+                />
+            </Card>
+        </div>
+    )
 }
+
+export default EntregaCrud

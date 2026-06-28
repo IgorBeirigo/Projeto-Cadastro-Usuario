@@ -1,0 +1,80 @@
+/* ============================================================================
+   LOADING SPINNER COMPONENT STYLES
+   ============================================================================ */
+
+.loading-spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+/* ============================================================================
+   SPINNER RING
+   ============================================================================ */
+
+.spinner-ring {
+  display: inline-block;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================================================
+   TAMANHOS
+   ============================================================================ */
+
+.spinner-size-sm .spinner-ring {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+  border-top-width: 2px;
+}
+
+.spinner-size-md .spinner-ring {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+  border-top-width: 4px;
+}
+
+.spinner-size-lg .spinner-ring {
+  width: 56px;
+  height: 56px;
+  border-width: 5px;
+  border-top-width: 5px;
+}
+
+/* ============================================================================
+   MENSAGEM
+   ============================================================================ */
+
+.spinner-message {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--color-gray-600);
+  text-align: center;
+}
+
+/* ============================================================================
+   FULL PAGE
+   ============================================================================ */
+
+.spinner-full-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: var(--z-fixed);
+  backdrop-filter: blur(2px);
+}

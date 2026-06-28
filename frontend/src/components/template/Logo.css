@@ -1,50 +1,109 @@
-aside.logo {
-    background-color: var(--bg-dark);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* ============================================================================
+   LOGO STYLES
+   ============================================================================ */
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-fast) var(--transition-timing);
 }
 
 .logo-container {
-    padding: 0 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast) var(--transition-timing);
 }
 
-aside.logo img {
-    height: 85%;
-    width: auto;
-    max-width: 100%;
-    transition: all 0.3s;
+.logo-container:hover {
+  transform: scale(1.05);
 }
 
-aside.logo img:hover {
-    transform: scale(1.05);
+.logo img {
+  height: auto;
+  width: 100%;
+  max-width: 180px;
+  object-fit: contain;
+  transition: all var(--transition-fast) var(--transition-timing);
+  filter: brightness(1);
+}
+
+.logo-container:hover img {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
 }
 
 .logo-text {
-    color: #fff;
-    font-size: 1.1em;
-    font-weight: 300;
-    transition: all 0.3s;
+  color: white;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-left: var(--spacing-md);
+  white-space: nowrap;
+  transition: all var(--transition-fast) var(--transition-timing);
 }
 
 .logo-container:hover .logo-text {
-    color: #3498db;
+  color: var(--color-gray-50);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-@media(max-width: 576px) {
-    aside.logo {
-        justify-content: center;
-    }
+/* ============================================================================
+   LOGO COLLAPSED (SIDEBAR COLAPSADA)
+   ============================================================================ */
 
-    aside.logo img {
-        height: 70%;
-    }
-    
-    .logo-text {
-        font-size: 0.9em;
-    }
+.logo.logo-collapsed {
+  padding: var(--spacing-md);
+}
+
+.logo.logo-collapsed img {
+  max-width: 50px;
+  width: 100%;
+}
+
+.logo.logo-collapsed .logo-text {
+  display: none;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .logo {
+    padding: var(--spacing-md);
+  }
+
+  .logo img {
+    max-width: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    padding: var(--spacing-md);
+  }
+
+  .logo img {
+    max-width: 140px;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .logo.logo-collapsed {
+    padding: var(--spacing-sm);
+  }
+
+  .logo.logo-collapsed img {
+    max-width: 45px;
+  }
 }

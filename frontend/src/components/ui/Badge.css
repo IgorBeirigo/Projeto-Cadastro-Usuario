@@ -1,0 +1,90 @@
+/* ============================================================================
+   BADGE COMPONENT STYLES
+   ============================================================================ */
+
+.badge-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+}
+
+/* ============================================================================
+   TAMANHOS
+   ============================================================================ */
+
+.badge-size-sm {
+  padding: 2px 8px;
+  font-size: var(--font-size-xs);
+  height: 20px;
+}
+
+.badge-size-md {
+  padding: 4px 12px;
+  font-size: var(--font-size-sm);
+  height: 24px;
+}
+
+.badge-size-lg {
+  padding: 6px 14px;
+  font-size: var(--font-size-base);
+  height: 28px;
+}
+
+/* ============================================================================
+   VARIANTES
+   ============================================================================ */
+
+.badge-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.badge-secondary {
+  background-color: var(--color-secondary-light);
+  color: var(--color-secondary);
+}
+
+.badge-success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badge-warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.badge-error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.badge-info {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+/* ============================================================================
+   ROUNDED
+   ============================================================================ */
+
+.badge-rounded {
+  border-radius: var(--radius-full);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* ============================================================================
+   ÍCONE
+   ============================================================================ */
+
+.badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1em;
+  width: 1em;
+}
