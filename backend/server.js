@@ -11,14 +11,48 @@ const entregaRoutes = require('./routes/entregaRoutes');
 const db = require('./models');
 const app = express();
 
+const parseOrigins = (value) => {
+    if (!value) return [];
+    return value
+        .split(',')
+        .map(origin => origin.trim())
+        .filter(Boolean);
+};
+
+const configuredOrigins = [
+    ...parseOrigins(process.env.FRONTEND_URLS),
+    ...parseOrigins(process.env.FRONTEND_URL)
+];
+
+const developmentOrigins = [
+    'http://localhost:3000',
+    'http://localhost:3002',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3002'
+];
+
+const allowedOrigins = new Set([
+    ...configuredOrigins,
+    ...(process.env.NODE_ENV === 'production' ? [] : developmentOrigins)
+]);
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.has(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error(`Origem nao permitida pelo CORS: ${origin}`));
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 204
+};
+
 // Middleware de segurança e logging
 app.use(helmet());
 app.use(morgan('combined'));
-app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type']
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Roteamento

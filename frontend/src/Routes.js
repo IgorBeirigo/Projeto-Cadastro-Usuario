@@ -9,6 +9,7 @@ import PortalColaborador from './pages/PortalColaborador'
 import Holerites from './pages/Holerites'
 import FolhaPonto from './pages/FolhaPonto'
 import BaterPonto from './pages/BaterPonto'
+import MeuPerfil from './pages/MeuPerfil'
 
 export default props => (
     <Routes>
@@ -17,6 +18,7 @@ export default props => (
         <Route path='/produtos' element={<ProdutoCrud />} />
         <Route path='/entregas' element={<EntregaCrud />} />
         <Route path='/portal-colaborador' element={<PortalColaborador />} />
+        <Route path='/portal-colaborador/meu-perfil' element={<MeuPerfil />} />
         <Route path='/portal-colaborador/holerites' element={<Holerites />} />
         <Route path='/portal-colaborador/ponto' element={<FolhaPonto />} />
         <Route path='/portal-colaborador/bater-ponto' element={<BaterPonto />} />
